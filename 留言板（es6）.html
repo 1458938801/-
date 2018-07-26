@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>留言板</title>
+    <script src="react.js"></script>
+    <script src="react-dom.js"></script>
+    <script src="browser.min.js"></script>
+    <style>
+        body{
+            background: #b9daff;
+        }
+        h2{
+            font-family: sans-serif;
+            font-style: italic;
+
+        }
+        input{
+            padding:10px;
+            margin: 15px;
+            background: white;
+            border: 2px solid #1e27bc;
+
+        }
+        button{
+            padding:10px;
+            font-size: 16px;
+            background: #9ebbff;
+
+        }
+        button:hover{
+            background:#6794ff ;
+        }
+        ul{
+            list-style: none;
+
+        }
+        li{
+            color:#333333;
+            background-color: rgba(255, 2555, 255, .5);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+      <div id="container"></div>
+     <script type="text/babel">
+         class TodoList extends React.Component{
+             render(){
+                 return(
+                     <ul>
+                         {
+                             this.props.todos.map((todo,index) =>{return<li key={index}>{todo}</li>})   //使用map要有key
+                         }
+                     </ul>
+                 )
+             }
+         }
+         class App extends React.Component{
+             constructor(props){
+                 super(props);
+                 //初始化
+                 this.state={
+                     todos:[]
+                 }
+             }
+             addTodo(){
+                 //得到输入的数据
+                 var inputTodo=this.refs.inputTodo.value;
+                 if(inputTodo.trim()==""){                //判断如果输入是空字符串就返回
+                     return;
+                 }
+                 //添加到todos第一行,并更新
+                 this.state.todos.unshift(inputTodo);
+                 this.setState({
+                     todos:this.state.todos
+                 })
+
+                 //移除输入的数据
+                 this.refs.inputTodo.value="";
+                 this.refs.inputTodo.focus();       //输入框获得焦点
+             }
+             render(){
+                 return(
+                     <div>
+                         <h2>留言板</h2>
+                         <input type="text" ref="inputTodo" placeholder="请输入你想说的话" />
+                         <button onClick={this.addTodo.bind(this)}>添加{this.state.todos.length+1}</button>
+                         <TodoList todos={this.state.todos}/>
+                     </div>
+                 )
+             }
+         }
+         ReactDOM.render(
+             <App/>,document.getElementById("container")
+         )
+     </script>
+</body>
+</html>
